@@ -14,8 +14,8 @@ BEFORE_THIS_DATE = datetime(2014, 1, 1)
 AFTER_THIS_DATE = None
 DELETE_TWEETS_FOUND_IN_RANGE = True
 SAVE_TWEET_DATA_PATH = "deleted_tweets.json"
-START_WITH_TWEET_ID = 522239131259535360
-
+START_WITH_TWEET_ID = 000000000000000000
+                      
 # state reducer constants
 API = "API"
 TWEETS = "TWEETS"
@@ -205,7 +205,7 @@ def delete_tweets(fields: Fields, save_to_path: Optional[str] = None) -> None:
 
 def main():
     get_tweet_fn = get_tweets(after=AFTER_THIS_DATE, before=BEFORE_THIS_DATE, save_last_ids=SAVE_LAST_IDS_TO_FILE)
-    tweets = get_tweet_fn(start_with_id=START_WITH_TWEET_ID)
+    tweets = get_tweet_fn()
 
     if DELETE_TWEETS_FOUND_IN_RANGE:
         delete_tweets(tweets, save_to_path=SAVE_TWEET_DATA_PATH)
