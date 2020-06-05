@@ -202,14 +202,18 @@ class TwitterType:
         }
 
     @staticmethod
-    def to_json(tweet_list: List[OneTweet], fn: str) -> None:
+    def to_json(fn: str, tweet_list: List[OneTweet]) -> None:
         import json
         with open(fn, "w") as fp:
             json.dump(TwitterType.to_dict(tweet_list), fp)
 
 
-def one_tweet_from_dict(s: Any) -> List['OneTweet']:
+def tweet_list_from_response(s: Any) -> List['OneTweet']:
     return TwitterType.from_response(s)
+
+
+def dump_tweets_to_json(file_name: str, tweets: List[OneTweet]) -> None:
+    TwitterType.to_json(file_name, tweets)
 
 
 def welcome_to_dict(x: TwitterType) -> Any:

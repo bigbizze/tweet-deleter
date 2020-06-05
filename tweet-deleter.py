@@ -4,7 +4,7 @@ from typing import List, Optional, NamedTuple, Callable, Union
 from datetime import datetime
 import twitter
 import json
-from TwitterType import TwitterType, OneTweet
+from TwitterType import tweet_list_from_response, dump_tweets_to_json, OneTweet
 
 
 """
@@ -188,7 +188,7 @@ def get_tweets(
 
         def _get_tweets(_id: Optional[int] = None) -> List[OneTweet]:
             tweets_json = state["fields"].api.GetUserTimeline(creds["user_id"], max_id=_id)
-            return TwitterType.from_response(json.loads(tweets_json))
+            return tweet_list_from_response(json.loads(tweets_json))
 
         def _process_tweets(_last_id: int) -> ProcessedTweets:
             _tweets = _get_tweets(_last_id)
@@ -235,7 +235,7 @@ def main():
     fields = get_tweet_fn(start_with_id=START_WITH_TWEET_ID)
 
     if SAVE_TWEET_DATA_PATH:
-        TwitterType.to_json(fields.tweets, SAVE_TWEET_DATA_PATH)
+        dump_tweets_to_json(SAVE_TWEET_DATA_PATH, fields.tweets)
 
     if DELETE_TWEETS_FOUND_IN_RANGE:
         delete_tweets(fields)
