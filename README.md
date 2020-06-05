@@ -9,7 +9,7 @@ I wrote this in only a few hours so I would definitely recommend running it once
 Use at your own risk (it worked fine for me for what that's worth).
 
 NOTE:
-The version of python-twitter included in the virtual environmennt is slightly modified so that the "GetUserTimeline" function returns the raw JSON response from twitter instead of their wrapper for it.
+The version of python-twitter included in the virtual environmennt is slightly modified so that the "GetUserTimeline" function returns the raw JSON response from twitter instead of their wrapper for it. To do this I added a single non-blank line to the api.py file in python-twitter, as detailed below. If you don't use the included virtual environment, make sure you change this prior to using it.
 
 Originally:
 ![alt text](https://i.imgur.com/I7T8nDI.png)
