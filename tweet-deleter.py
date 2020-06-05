@@ -7,15 +7,44 @@ import json
 from TwitterType import TwitterType, OneTweet
 
 
+"""
+DELETE_TWEETS_FOUND_IN_RANGE:
+    After parsing the tweets found by your range specification, delete them if true.
+    
+SAVE_LAST_IDS_TO_FILE: 
+    Saves a reference of the ID and datetime of the last tweet in each request,
+     this is so you have reference points to begin searching from instead of 
+     always starting from the most recent tweet
+     
+CREDENTIALS_PATH:
+    Path to file containing the relevant Twitter credentials
+
+SAVE_TWEET_DATA_PATH:
+    If this contains a non-empty string, dump parsed tweets to a JSON file at this location
+    
+BEFORE_THIS_DATE:
+    Reduce tweets list to only those found before this date
+    
+AFTER_THIS_DATE:
+    Reduce tweets list to only those found after this date
+    
+START_WITH_TWEET_ID:
+    Begins tweet parsing from the tweet whose ID is specified by this (instead of from the most recent tweet)
+    Used in conjunction with ids found in SAVE_LAST_IDS_TO_FILE.
+"""
+
 # user defined constants
-CREDENTIALS_PATH = "twitter_creds.json"
+DELETE_TWEETS_FOUND_IN_RANGE = True
 SAVE_LAST_IDS_TO_FILE = True
+
+CREDENTIALS_PATH = "twitter_creds.json"
+SAVE_TWEET_DATA_PATH = "deleted_tweets.json"
+
 BEFORE_THIS_DATE = datetime(2014, 1, 1)
 AFTER_THIS_DATE = None
-DELETE_TWEETS_FOUND_IN_RANGE = True
-SAVE_TWEET_DATA_PATH = "deleted_tweets.json"
+
 START_WITH_TWEET_ID = 000000000000000000
-                      
+
 # state reducer constants
 API = "API"
 TWEETS = "TWEETS"
@@ -187,12 +216,10 @@ def get_tweets(
     return get_tweets_
 
 
-def delete_tweets(fields: Fields, save_to_path: Optional[str] = None) -> None:
+def delete_tweets(fields: Fields) -> None:
     state = {
         "fields": fields
     }
-    if save_to_path:
-        TwitterType.to_json(fields.tweets, save_to_path)
 
     api = get_api()
     for _tweet in fields.tweets:
@@ -205,10 +232,13 @@ def delete_tweets(fields: Fields, save_to_path: Optional[str] = None) -> None:
 
 def main():
     get_tweet_fn = get_tweets(after=AFTER_THIS_DATE, before=BEFORE_THIS_DATE, save_last_ids=SAVE_LAST_IDS_TO_FILE)
-    tweets = get_tweet_fn()
+    fields = get_tweet_fn(start_with_id=START_WITH_TWEET_ID)
+
+    if SAVE_TWEET_DATA_PATH:
+        TwitterType.to_json(fields.tweets, SAVE_TWEET_DATA_PATH)
 
     if DELETE_TWEETS_FOUND_IN_RANGE:
-        delete_tweets(tweets, save_to_path=SAVE_TWEET_DATA_PATH)
+        delete_tweets(fields)
 
 
 if __name__ == '__main__':
