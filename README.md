@@ -7,3 +7,12 @@ Enter the appropriate Api application credentials into "twitter_creds.json" & ch
 I wrote this in only a few hours so I would definitely recommend running it once with the "DELETE_TWEETS_FOUND_IN_RANGE" flag set to false, and a path provided to "SAVE_TWEET_DATA_PATH" so you can have a look at the tweets it has found for deletion.
 
 Use at your own risk (it worked fine for me for what that's worth).
+
+NOTE:
+The version of python-twitter included in the virtual environmennt is slightly modified so that the "GetUserTimeline" function returns the raw JSON response from twitter instead of their wrapper for it.
+
+Originally:
+![alt text](https://i.imgur.com/I7T8nDI.png)
+
+Modified to:
+![alt text](https://i.imgur.com/ELOb0gz.png)
